@@ -4,12 +4,14 @@ import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
 public class TemperatureSubscriber {
     public static void main(String[] args) {
-        String broker = "tcp://mqtt.eclipse.org:1883";
+        String broker = "tcp://test.mosquitto.org:1883";
         String clientId = "TemperatureSubscriber";
         MemoryPersistence persistence = new MemoryPersistence();
 
+        MqttClient client = null;  // Declare the MQTT client outside the try-catch block.
+
         try {
-            MqttClient client = new MqttClient(broker, clientId, persistence);
+            client = new MqttClient(broker, clientId, persistence);
             MqttConnectOptions connOpts = new MqttConnectOptions();
             connOpts.setCleanSession(true);
 
@@ -33,9 +35,18 @@ public class TemperatureSubscriber {
             client.connect(connOpts);
             client.subscribe("temperature");
 
+            // Continue your processing here.
+
         } catch (MqttException e) {
             e.printStackTrace();
+        } finally {
+            if (client != null && client.isConnected()) {
+                try {
+                    client.disconnect();
+                } catch (MqttException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 }
-

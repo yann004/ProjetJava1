@@ -1,9 +1,10 @@
 package Projet;
 import org.eclipse.paho.client.mqttv3.*;
+import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
 public class TemperatureSensor {
     public static void main(String[] args) {
-        String broker = "tcp://mqtt.eclipse.org:1883";
+        String broker = "tcp://test.mosquitto.org:1883";
         String clientId = "TemperatureSensor";
         MemoryPersistence persistence = new MemoryPersistence();
 
